@@ -22,7 +22,7 @@ import org.junit.runner.RunWith
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 class TaskDetailFragmentTest {
 
     private lateinit var repository: TasksRepository
