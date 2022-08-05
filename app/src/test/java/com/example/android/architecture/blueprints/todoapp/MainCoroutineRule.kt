@@ -3,12 +3,11 @@ package com.example.android.architecture.blueprints.todoapp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
-
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
 @ExperimentalCoroutinesApi
-class MainCoroutineRule(private val dispatcher: TestDispatcher = UnconfinedTestDispatcher()):
+class MainCoroutineRule(val dispatcher: TestDispatcher = UnconfinedTestDispatcher()):
     TestWatcher() {
     override fun starting(description: Description) {
         super.starting(description)
