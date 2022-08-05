@@ -2,19 +2,13 @@ package com.example.android.architecture.blueprints.todoapp.tasks
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.architecture.blueprints.todoapp.Event
-import com.example.android.architecture.blueprints.todoapp.FakeTestRepository
-import com.example.android.architecture.blueprints.todoapp.R
+import com.example.android.architecture.blueprints.todoapp.*
 import com.example.android.architecture.blueprints.todoapp.data.Task
-import com.example.android.architecture.blueprints.todoapp.getOrAwaitValue
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.core.IsNot.not
 import org.hamcrest.core.IsNull.nullValue
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,17 +27,9 @@ internal class TasksViewModelTest {
     var instantExecutorRule = InstantTaskExecutorRule()
 
     @ExperimentalCoroutinesApi
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
 
-    @Before
-    fun setupDispatcher() {
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @After
-    fun tearDownDispatcher() {
-        Dispatchers.resetMain()
-    }
 
     @Before
     fun setupViewModel() {
