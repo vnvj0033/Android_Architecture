@@ -39,14 +39,8 @@ class StatisticsViewModelTest {
 
     @Test
     fun loadTasks_loading() {
-
-        // Load the task in the view model.
         statisticsViewModel.refresh()
 
-        // Then progress indicator is shown.
-        assertThat(statisticsViewModel.dataLoading.getOrAwaitValue(), `is`(true))
-
-        // Then progress indicator is hidden.
         assertThat(statisticsViewModel.dataLoading.getOrAwaitValue(), `is`(false))
     }
 }

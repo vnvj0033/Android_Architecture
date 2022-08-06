@@ -50,10 +50,10 @@ class StatisticsViewModel(
 
     fun refresh() {
         _dataLoading.value = true
-            viewModelScope.launch {
-                tasksRepository.refreshTasks()
-                _dataLoading.value = false
-            }
+        viewModelScope.launch {
+            tasksRepository.refreshTasks()
+            _dataLoading.value = false
+        }
     }
 }
 
