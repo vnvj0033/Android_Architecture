@@ -39,8 +39,20 @@ class StatisticsViewModelTest {
 
     @Test
     fun loadTasks_loading() {
+
+        // Pause dispatcher so you can verify initial values.
+        mainCoroutineRule.dispatcher.scheduler.advanceUntilIdle()
+
+        // Load the task in the view model.
         statisticsViewModel.refresh()
 
+        // Then assert that the progress indicator is shown.
+        assertThat(statisticsViewModel.dataLoading.getOrAwaitValue(), `is`(true))
+
+        // Execute pending coroutines actions.
+        mainCoroutineRule.dispatcher.scheduler.runCurrent()
+
+        // Then assert that the progress indicator is hidden.
         assertThat(statisticsViewModel.dataLoading.getOrAwaitValue(), `is`(false))
     }
 }
