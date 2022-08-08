@@ -8,6 +8,47 @@ androidTest : 계측 테스트 코드
 test: 유닛 테스트
 ```
 
+## Hamcrest
+```kotlin
+// REPLACE
+assertEquals(result, 100f)
+// WITH
+assertThat(result, `is`(100f))
+```
+
+## readable tests Given, When, Then
+```
+Given : 테스트에 필요한 객체나 앱의 상태를 설정
+When : 테스트 중인 개체에 대한 실제 작업을 수행
+Then : 테스트 실행여부를 통과 여부 확인
+```
+
+## Test Driven Development
+```
+Give, When, Then 구조를 사용하고 규칙을 따르는 이름으로 테스트를 작성합니다.
+테스트 실패를 확인합니다.
+테스트를 통과하도록 최소한의 코드를 작성하세요.
+모든 테스트에 대해 반복하세요
+```
+
+## AndroidX test
+```
+@RunWith(AndroidJUnit4::class)
+class TasksViewModelTest {
+    // Test code
+}
+
+// use applicationContext
+ApplicationProvider.getApplicationContext()
+```
+
+## LiveData test
+참조 getOrAwaitValue
+<br/>
+https://medium.com/androiddevelopers/unit-testing-livedata-and-other-common-observability-problems-bb477262eb04
+
+
+
 
 TO-DO Notes - Code for 5.1-5.3 Testing Codelab
 ============================================================================
