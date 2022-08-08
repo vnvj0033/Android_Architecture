@@ -5,6 +5,8 @@ import com.example.android.architecture.blueprints.todoapp.FakeTestRepository
 import com.example.android.architecture.blueprints.todoapp.MainCoroutineRule
 import com.example.android.architecture.blueprints.todoapp.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Before
@@ -57,11 +59,13 @@ class StatisticsViewModelTest {
     }
 
     @Test
-    fun loadStatisticsWhenTasksAreUnavailable_callErrorToDisplay() {
+    fun loadStatisticsWhenTasksAreUnavailable_callErrorToDisplay() = runTest(mainCoroutineRule.dispatcher) {
+
         // Make the repository return errors.
         tasksRepository.setReturnError(true)
         statisticsViewModel.refresh()
 
+        runCurrent()
         // Then empty and error are true (which triggers an error message to be shown).
         assertThat(statisticsViewModel.empty.getOrAwaitValue(), `is`(true))
         assertThat(statisticsViewModel.error.getOrAwaitValue(), `is`(true))
