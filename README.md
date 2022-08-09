@@ -1,38 +1,98 @@
 Android testing
 ============================================================================
-
-## source sets
-```
-main: 앱의 코드
-androidTest : 계측 테스트 코드
-test: 유닛 테스트
-```
-
-## Hamcrest
+## Coroutine test
 ```kotlin
-// REPLACE
-assertEquals(result, 100f)
-// WITH
-assertThat(result, `is`(100f))
+// test rule
+@ExperimentalCoroutinesApi
+class MainCoroutineRule(val dispatcher: TestDispatcher = StandardTestDispatcher()):
+    TestWatcher() {
+    override fun starting(description: Description) {
+        super.starting(description)
+        Dispatchers.setMain(dispatcher)
+    }
+
+    override fun finished(description: Description) {
+        super.finished(description)
+        Dispatchers.resetMain()
+    }
+}
+
+
+@ExperimentalCoroutinesApi
+@get:Rule
+var mainCoroutineRule = MainCoroutineRule()
+
+fun scope_test_in_object() {
+    // coroutine blocking
+    mainCoroutineRule.dispatcher.scheduler.advanceUntilIdle()
+    
+    ...
+    
+    // coroutine resume
+    mainCoroutineRule.dispatcher.scheduler.runCurrent()
+}
+
+fun coroutine_test() = runTest(mainCoroutineRule.dispatcher) {
+
+}
 ```
 
-## readable tests Given, When, Then
-```
-Given : 테스트에 필요한 객체나 앱의 상태를 설정
-When : 테스트 중인 개체에 대한 실제 작업을 수행
-Then : 테스트 실행여부를 통과 여부 확인
+
+
+## Mockito Fragment
+```kotlin
+val scenario = launchFragmentInContainer<TestFragment>(Bundle(), R.style.AppTheme)
+
+val navController = mock(NavController::class.java)
+
+scenario.onFragment {
+    Navigation.setViewNavController(it.view!!, navController)
+}
+
+verify(navController).navigate(
+        TestFragmentDirections.actionTestFragmentToTestDetailFragment( "id1")
+    )
 ```
 
-## Test Driven Development
+
+## Espresso
+Static Espresso method : onView, onData<br />
+ViewMatcher : withId<br />
+ViewAction : perform<br />
+ViewAssertion : check<br />
+```kotlin
+onView(withId(R.id.task_detail_complete_checkbox)).perform(click()).check(matches(isChecked()))
 ```
-Give, When, Then 구조를 사용하고 규칙을 따르는 이름으로 테스트를 작성합니다.
-테스트 실패를 확인합니다.
-테스트를 통과하도록 최소한의 코드를 작성하세요.
-모든 테스트에 대해 반복하세요
+
+## Fragment test
+Fragment로 전달되는 Bundle을 만듭니다.<br />
+launchFragmentInContainer함수로 번들과 테마를 주입하여 FragmentScenario를 만듭니다.
+```kotlin
+@MediumTest
+@RunWith(AndroidJUnit4::class)
+class TaskDetailFragmentTest {
+    // use navigation
+    val bundle = TestFragmentArgs(activeTask.id).toBundle()
+    launchFragmentInContainer<TestFragment>(bundle, R.style.AppTheme)
+}
 ```
+
+
+## Test Doubles
+```
+Fake : 클래스의 동작만 구현하는 방법, 테스트에는 적합하나 프로덕션에는 부적합한 방식으로 구현되는 테스트 더블입니다.
+Mock : 어떤 메서드가 호출되었을때 기대값을 호출하는 테스트 더블입니다. 그런 다음 메서드가 올바르게 호출되었는지 여부에 따라 테스트를 통과하거나 실패합니다.
+```
+
+
+## LiveData test
+참조 getOrAwaitValue
+<br/>
+https://medium.com/androiddevelopers/unit-testing-livedata-and-other-common-observability-problems-bb477262eb04
+
 
 ## AndroidX test
-```
+```kotlin
 @RunWith(AndroidJUnit4::class)
 class TasksViewModelTest {
     // Test code
@@ -42,13 +102,39 @@ class TasksViewModelTest {
 ApplicationProvider.getApplicationContext()
 ```
 
-## LiveData test
-참조 getOrAwaitValue
-<br/>
-https://medium.com/androiddevelopers/unit-testing-livedata-and-other-common-observability-problems-bb477262eb04
+
+## Test Driven Development
+```
+Give, When, Then 구조를 사용하고 규칙을 따르는 이름으로 테스트를 작성합니다.
+테스트 실패를 확인합니다.
+테스트를 통과하도록 최소한의 코드를 작성하세요.
+모든 테스트에 대해 반복하세요
+```
 
 
+## readable tests Given, When, Then
+```
+Given : 테스트에 필요한 객체나 앱의 상태를 설정
+When : 테스트 중인 개체에 대한 실제 작업을 수행
+Then : 테스트 실행여부를 통과 여부 확인
+```
 
+
+## Hamcrest
+```kotlin
+// REPLACE
+assertEquals(result, 100f)
+// WITH
+assertThat(result, `is`(100f))
+```
+
+
+## source sets
+```
+main: 앱의 코드
+androidTest : 계측 테스트 코드
+test: 유닛 테스트
+```
 
 TO-DO Notes - Code for 5.1-5.3 Testing Codelab
 ============================================================================
