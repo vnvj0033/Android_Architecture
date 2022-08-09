@@ -59,7 +59,7 @@ class StatisticsViewModelTest {
     }
 
     @Test
-    fun loadStatisticsWhenTasksAreUnavailable_callErrorToDisplay() = runTest(mainCoroutineRule.dispatcher) {
+    fun loadStatisticsWhenTasksAreUnavailable_callErrorToDisplay() = runTest {
 
         // Make the repository return errors.
         tasksRepository.setReturnError(true)
