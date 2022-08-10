@@ -28,6 +28,7 @@ android {
 
     testOptions.unitTests {
         includeAndroidResources = true
+        returnDefaultValues = true
     }
 }
 
@@ -81,6 +82,8 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 
     androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"
+
+    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
 
     // Dependencies for Android instrumented unit tests
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
