@@ -1,5 +1,25 @@
 Android testing
 ============================================================================
+## Room test
+```
+@Before
+fun initDb() {
+    // Using an in-memory database for testing, because it doesn't survive killing the process.
+    database = Room.inMemoryDatabaseBuilder(
+        ApplicationProvider.getApplicationContext(),
+        ToDoDatabase::class.java
+    )
+    .allowMainThreadQueries()
+    .build()
+}
+
+@After
+fun closeDb() = database.close()
+
+```
+
+
+
 ## Coroutine test
 ```kotlin
 // test rule
@@ -55,6 +75,7 @@ verify(navController).navigate(
 ```
 
 
+
 ## Espresso
 Static Espresso method : onView, onData<br />
 ViewMatcher : withId<br />
@@ -63,6 +84,8 @@ ViewAssertion : check<br />
 ```kotlin
 onView(withId(R.id.task_detail_complete_checkbox)).perform(click()).check(matches(isChecked()))
 ```
+
+
 
 ## Fragment test
 Fragment로 전달되는 Bundle을 만듭니다.<br />
@@ -78,6 +101,7 @@ class TaskDetailFragmentTest {
 ```
 
 
+
 ## Test Doubles
 ```
 Fake : 클래스의 동작만 구현하는 방법, 테스트에는 적합하나 프로덕션에는 부적합한 방식으로 구현되는 테스트 더블입니다.
@@ -85,10 +109,12 @@ Mock : 어떤 메서드가 호출되었을때 기대값을 호출하는 테스�
 ```
 
 
+
 ## LiveData test
 참조 getOrAwaitValue
 <br/>
 https://medium.com/androiddevelopers/unit-testing-livedata-and-other-common-observability-problems-bb477262eb04
+
 
 
 ## AndroidX test
@@ -103,6 +129,7 @@ ApplicationProvider.getApplicationContext()
 ```
 
 
+
 ## Test Driven Development
 ```
 Give, When, Then 구조를 사용하고 규칙을 따르는 이름으로 테스트를 작성합니다.
@@ -110,6 +137,7 @@ Give, When, Then 구조를 사용하고 규칙을 따르는 이름으로 테스�
 테스트를 통과하도록 최소한의 코드를 작성하세요.
 모든 테스트에 대해 반복하세요
 ```
+
 
 
 ## readable tests Given, When, Then
@@ -120,6 +148,7 @@ Then : 테스트 실행여부를 통과 여부 확인
 ```
 
 
+
 ## Hamcrest
 ```kotlin
 // REPLACE
@@ -127,6 +156,7 @@ assertEquals(result, 100f)
 // WITH
 assertThat(result, `is`(100f))
 ```
+
 
 
 ## source sets
